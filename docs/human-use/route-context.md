@@ -55,3 +55,10 @@ During a development session the agent may propose one fact the three states
 need. It writes that fact only into the host project's route-facts file
 handed over with this one, and only after the developer says yes. It does not write into this file, and the `decide` state is not
 that writer. One proposed fact, one yes, one write.
+
+## Curiosity
+
+Once a session has been handed over, and until a bite is named, curiosity
+picks only the next ask. It does not pick a step for the agent to do. It does
+not start the session. It does not add a state. It does not write a fact
+without a yes. It does not choose a build.

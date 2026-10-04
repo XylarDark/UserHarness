@@ -38,34 +38,7 @@ placing it in extras, and keep the `description` to a single sentence naming the
 - ESLint flat config in `eslint.config.js`. The `.eslintrc.*` format is dead; ESLint 10 ignores it.
 - Prettier, single quotes, configured in `.prettierrc`.
 
-## Commands
-
-Run these from the repository root.
-
-| Command                   | Purpose                                                 |
-| ------------------------- | ------------------------------------------------------- |
-| `npm run doctor`          | Health check: stack detection, gap analysis, scoring    |
-| `npm run doctor:fix`      | Health check, then apply automatic fixes                |
-| `npm run build`           | Type-check, then compile to `dist/`                     |
-| `npm run build:clean`     | Purge `dist/` first, then build                         |
-| `npm test`                | Build, then run `tests/**/*.test.js`                    |
-| `npm run lint`            | ESLint over the repo                                    |
-| `npm run format`          | Prettier write; `format:check` verifies without writing |
-| `npm run clean`           | Remove `dist/` and `tsconfig.tsbuildinfo`               |
-| `npm run check:doc-links` | Verify every relative markdown link resolves            |
-| `npm run check:encoding`  | Detect double-encoded UTF-8 (mojibake)                  |
-
-**Pass script flags after `--`.** `npm run doctor -- --fix` forwards the flag to the doctor;
-`npm run doctor --fix` gives it to npm instead, which silently ignores it. This has been a
-recurring source of no-op commands in this repo's own docs and CI.
-
-**In PowerShell, quote the separator:** `npm run doctor '--' --fast`. PowerShell strips a bare
-`--` before npm sees it, so the unquoted form silently runs without the flag. Check npm's echoed
-command line: it must end in the flag you passed. The quoted form is also correct in bash.
-
-Useful doctor flags: `--fix`, `--no-install`, `--preset <framework>`, `--dry-run`, `--json`,
-`--strict` (fail on warnings), `--fast` (skip docs, performance, accessibility, Docker,
-environment, git hooks, frameworks, Python tooling), `--project-root <path>`.
+See [docs/context/commands.md](docs/context/commands.md) for Commands.
 
 ## Layout
 
@@ -118,54 +91,11 @@ cannot be scripted, record it in `docs/operational/automation-gaps.md` instead.
 **Plan multi-file work.** For changes spanning several modules, or that touch architecture or
 public APIs, propose a short plan before editing. See the `plan-first` skill. For boundaries, module APIs, data/replication, team ownership, or integration points, load the opt-in skill [architecture-trade-offs-design-depth](.agents/skills-extras/architecture-trade-offs-design-depth/SKILL.md) (Layers A–E; **writer**; canon blob `107a5118c95c1bf0b1b3d1755796632bff41b535`; see [SYNC.md](.agents/skills-extras/architecture-trade-offs-design-depth/SYNC.md)). Copy into `.agents/skills/` to enable; do not paste into this file.
 
-## Development phase
+See [docs/context/development-phase.md](docs/context/development-phase.md) for Development phase.
 
-Every area is **shaping** or **settled**: shaping means the design is still being decided and the
-developer's judgment is the success criterion, settled means the shape is agreed and the job is to
-keep it that way.
+See [docs/context/conventions.md](docs/context/conventions.md) for Conventions.
 
-- `scripts/doctor/**`, `scripts/tools/**`, `scripts/utils/**` — settled
-- `.agents/**`, `docs/**`, and everything else — shaping
-
-**In a shaping area**, spend the budget on something the developer can react to. Skip tests,
-guard-test proofs, the pre-work baseline, and doc updates; say in one line what you did not verify.
-Use `npm run doctor '--' --fast`. The security baseline below is the only floor. **In a settled
-area**, every obligation in the skills applies as written.
-
-**Promotion is deliberate.** Moving an area to settled means that same change adds the tests, the
-guard test per bug fixed while shaping, the doc updates, and the `docs/KNOWN_ERRORS.md` entries
-that shaping deferred, and deletes the scratch files. Shaping defers those obligations; it does
-not abolish them.
-
-**Then hardening, once.** When taste and features are locked and the product is about to be
-deployed, run `npm run preflight` and work the hardening pass in the `secure-coding` skill. It
-composes verify, the dependency audit, registry signatures, a secret scan, and a strict doctor
-run, then names the controls no repository check can see. Entering it is a decision: nothing is
-hardened while its shape is still moving.
-
-## Conventions
-
-- **Commits:** Conventional Commits (`feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `chore`,
-  `style`, `ci`). Imperative mood, first line under 72 characters, no emoji. Body lines wrap at
-  100 characters. Commitlint enforces this in a hook.
-- **Branches:** `feat/`, `fix/`, `refactor/`, `perf/`, `docs/`, `test/`, `chore/`.
-- **Files:** kebab-case (`user-service.ts`). Name the file after its primary export.
-- **Naming:** functions are verbs, types are nouns, booleans read as questions, constants are
-  `UPPER_SNAKE_CASE`.
-- **Docs:** place new documents per `docs/DOCS_LAYOUT.md`. The docs root is a closed set of entry
-  points; topic documents belong in a subdirectory. Run `npm run check:doc-links` after moving
-  or renaming anything.
-
-## Testing
-
-These apply to settled areas. While shaping, see **Development phase** above.
-
-- Unit tests finish in under 5 seconds total; integration tests in under 60.
-- Every test needs a timeout, must run independently, and must clean up in `afterEach`.
-- Use real temporary directories (`fs.mkdtemp`), not `mock-fs` — this repo runs on Windows too.
-- Test behavior, not implementation. Feature work uses user-flow (BDD) scenarios; a failing
-  test is still the definition of done in settled areas. Classic red-green TDD is for
-  critical or low-level units and for regression guards. If you skip tests, say why.
+See [docs/context/testing.md](docs/context/testing.md) for Testing.
 
 ## Security baseline
 
@@ -179,34 +109,6 @@ These apply to settled areas. While shaping, see **Development phase** above.
 - Dependency updates arrive monthly via Dependabot, grouped. `npm run preflight` runs
   `npm audit --audit-level=high` and `npm audit signatures`; the CI job that did is disabled.
 
-## Windows and PowerShell
+See [docs/context/windows-powershell.md](docs/context/windows-powershell.md) for Windows and PowerShell.
 
-This repo is developed on Windows and must work on macOS and Linux.
-
-- Chain commands with `;`, never `&&`.
-- Build paths with `path.join`; never hardcode separators.
-- Check a path exists before navigating to it.
-- Keep commit messages ASCII. Non-ASCII text elsewhere must be valid UTF-8: this repo has twice
-  had emoji double-encoded into mojibake, once breaking the linter and once garbling every
-  generated plan. `npm run check:encoding` detects it and `fix-mojibake.js --write` repairs it.
-
-## Applying this template to another project
-
-Copy this repo into the host as `.devenv/` only when the host wants the Node doctor. For game and
-engine repositories, copy just the agent and docs layer: `AGENTS.md`, `.agents/skills/` (core),
-optionally `.agents/skills-extras/`, the glob-scoped `.cursor/rules/`, `docs/DOCS_LAYOUT.md`,
-`docs/KNOWN_ERRORS.md`, `docs/operational/automation-gaps.md`, and `docs/human-use/`.
-See `.agents/README.md`.
-
-Host projects write their **own** `AGENTS.md`. The copy in this repo describes this repo.
-
-Skills travel verbatim, so any section of a skill that describes _this_ repository is marked with
-a **Localize on copy** callout and must be rewritten by the host. `tests/unit/skill-portability.test.js`
-fails if a skill names a repo-local script before that callout, and the integration step reports
-which copied skills carry one. Do not add a repo-local command to a skill's `description`: it is
-read without opening the file, so it cannot carry a warning.
-
-- **Unity:** keep `.cursor/rules/23-unity-csharp.mdc` and pin the editor version from
-  `ProjectSettings/ProjectVersion.txt`. See `docs/templates/unity/README.md`.
-- **Unreal:** keep `.cursor/rules/21-unreal-engine.mdc` and `22-unreal-editor-ui.mdc`. See
-  `docs/templates/unreal/README.md`.
+See [docs/context/apply-template.md](docs/context/apply-template.md) for Applying this template to another project.
