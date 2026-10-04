@@ -78,7 +78,7 @@ environment, git hooks, frameworks, Python tooling), `--project-root <path>`.
 - `docs/` — documentation, organized per `docs/DOCS_LAYOUT.md`.
 - `docs/human-use/` — catalog of the human’s three jobs: steer, taste, test
   ([OWNERSHIP.md](docs/human-use/OWNERSHIP.md)). Applies to every path and phase.
-  Alert, recommend, and ask; do not invent a human decision. Cycle: `docs/human-use/CYCLE.md`.
+  Alert, recommend, and ask; do not invent a human decision. Cycle: `docs/human-use/CYCLE.md`. The three working states (`agent` / `decide` / `do`) the agent names all session: `docs/human-use/route-context.md`.
 - `.devenv/` — generated reports. Gitignored; never commit anything from here.
 
 The tools exchange structured data: the stack detector writes `.devenv/stack-report.json`, the

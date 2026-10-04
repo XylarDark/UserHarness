@@ -5,7 +5,9 @@ due for **this task**. It is not a tour of `docs/human-use/`. Work under
 `scripts/`, `tests/`, `.agents/`, or docs uses the same detector.
 
 The agent’s first move — and any mid-task fork — is to name **who owns the next
-step** and **which job** (steer, taste, or test). If that owner is the human, it
+step** and **which job** (steer, taste, or test). The next-step owner is one of
+three working states — `agent`, `decide`, `do` — from
+[route-context.md](route-context.md). If that owner is the human, it
 **alerts**, **recommends**, and **asks**
 ([alert shape](OWNERSHIP.md#alert-when-your-input-is-required)). If that owner is
 the agent, it says so and executes — it still will not invent a human decision.

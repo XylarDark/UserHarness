@@ -1,0 +1,57 @@
+# Route context: three working states
+
+This is a pre-made context. The developer starts a development session on
+purpose and hands it to the agent. It is not a hook, not a session-close
+script, and not an editor startup task: a normal chat that was never handed
+this context does nothing, and nothing outside this conversation enforces it.
+
+Through the whole session — task start, every mid-task fork, and the close —
+the agent knows which of exactly three states it is in, names the state before
+acting, and never invents a fourth state in prose. A fourth name ("mixed",
+"both", "later", "mostly agent") is not a state. If two seem to apply, name
+the one that blocks the next step.
+
+## The three states
+
+| State | Who does the next step | What the agent does |
+| ----- | ---------------------- | ------------------- |
+| `agent` | the agent | do the work: research, design, implement, run, verify — what it can perform itself |
+| `decide` | the developer | stop and ask one plain question with the real options; do not guess, do not take the decision |
+| `do` | the developer | stop and hand the work over; say the work is theirs, and offer a tutorial made from research plus ongoing guidance |
+
+## How to detect the state
+
+First match wins, scoped to **this task** (the next step), not the whole
+project:
+
+1. The next step needs a judgment only the developer can make — vision, taste,
+   priority, ship/no-ship, which scenario exists, which option to pick — and
+   that judgment is not already recorded for this task → `decide`. Ask with
+   the real options, then stop.
+2. The next step needs hands the agent does not have — running the editor,
+   playing a build, hardware, an account or errand in the real world — and no
+   recorded judgment is waiting → `do`. Hand the work over; tutorial and
+   guidance on offer.
+3. Otherwise the agent can perform the next step itself → `agent`. Say so in
+   one owner sentence, then work. Still stop on a mid-task fork: a new shared
+   utility, a new tool, or an edit to always-on files re-runs detection from
+   step 1.
+
+## What this does not touch
+
+- Steer, Taste, and Test stay as they are: the developer's three decision
+  jobs. They are not renamed into these states, and these three states do not
+  replace them. `decide` answers "who must judge"; Steer/Taste/Test answer
+  "which job that judgment belongs to".
+- This file carries no project facts. Gate ids, map names, editor paths,
+  tutorial text, and polish-gate order live in the host project's adapters, which read this file for the state
+  names and detection rule and keep the facts local.
+- A red row or a failing check is not by itself a state. Detection runs on
+  who owns the next step.
+
+## Updating facts during a development session
+
+During a development session the agent may propose one fact the three states
+need. It writes that fact only into the host project's route-facts file
+handed over with this one, and only after the developer says yes. It does not write into this file, and the `decide` state is not
+that writer. One proposed fact, one yes, one write.
