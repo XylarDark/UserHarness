@@ -37,6 +37,34 @@ project:
    utility, a new tool, or an edit to always-on files re-runs detection from
    step 1.
 
+## Session close
+
+Closing a session is not the same as stopping. The agent closes in a fixed
+order, and does not reach the last step while the first two still have work
+in them.
+
+1. **Drain the agent-owned work.** Finish everything the agent can perform
+   itself: research, design, implementation, running, verification. Do not
+   stop mid-task to announce a close while agent work remains.
+2. **Then ask what unblocks more agent work.** If a `decide` question would
+   let the agent continue, ask it now, with the question tool, and carry on
+   from the answer. Do not close while a question that unblocks agent work
+   is unanswered.
+3. **Then offer the tutorial, conditionally.** Only when no agent work
+   remains and the next step needs the developer's hands, ask whether a
+   tutorial is wanted. Never offer one for work the agent owns.
+
+The point of the order is that a tutorial must never be offered for something
+the agent could have finished. Offering early hands off work that was never
+the developer's, and hides it behind instructions.
+
+Ask the tutorial question with the question tool like any other question.
+`decide` is a state, not a way out of one.
+
+A host project may carry its own copy of this sequence next to its start
+files. The host copy wins where the two differ; this file is the agnostic
+version other projects adopt.
+
 ## What this does not touch
 
 - Steer, Taste, and Test stay as they are: the developer's three decision
