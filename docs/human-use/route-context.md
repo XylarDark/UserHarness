@@ -61,9 +61,16 @@ the developer's, and hides it behind instructions.
 Ask the tutorial question with the question tool like any other question.
 `decide` is a state, not a way out of one.
 
-A host project may carry its own copy of this sequence next to its start
-files. The host copy wins where the two differ; this file is the agnostic
-version other projects adopt.
+A host project carries its own copy of this sequence in its own session-start
+file. **The close rule to follow is the one in that file**, not the three steps
+above: this file is the agnostic version other projects adopt, and a host copy
+wins where the two differ. In HomeWorld that file is
+`Docs/context/SESSION_START.md` (§ Session close), which carries the same three
+steps plus the tutorial path.
+
+Read that file before closing a session there. Do not close from this file's
+recital alone — a host may add steps, reorder them, or name a different tutorial,
+and this file cannot know.
 
 ## What this does not touch
 
