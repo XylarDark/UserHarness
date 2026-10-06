@@ -54,6 +54,10 @@ in them.
    remains and the next step needs the developer's hands, ask whether a
    tutorial is wanted. Never offer one for work the agent owns.
 
+In HomeWorld there is one start door, `Docs/context/SESSION_START.md`. Start
+every session there, and close by its Session close section, which is the
+HomeWorld copy of these steps. Where the two differ, `SESSION_START.md` wins.
+
 The point of the order is that a tutorial must never be offered for something
 the agent could have finished. Offering early hands off work that was never
 the developer's, and hides it behind instructions.
